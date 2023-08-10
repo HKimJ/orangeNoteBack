@@ -1,33 +1,63 @@
 package com.example.orangeNote.user.controller;
 
-import com.example.orangeNote.user.domain.UserDto;
-import com.example.orangeNote.user.repository.UserRepository;
+import com.example.orangeNote.user.domain.UserDomain;
+import com.example.orangeNote.user.dto.UserDto;
+import com.example.orangeNote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepo;
+    private final UserService userService;
 
     @RequestMapping
-    public void test() {
-        System.out.println("테스트 시작");
+    public void home() {
+        System.out.println("시작화면");
+    }
 
-        UserDto usd = new UserDto();
-        usd.setUser_id("tester1");
-        usd.setEmail("testemail");
-        usd.setPassword("testpsw");
-        usd.setJoinDate(new Date());
-
-        userRepo.save(usd);
-
-        System.out.println("처리 완료");
+    @RequestMapping("/sample")
+    public void sample() {
+        List<UserDomain> list = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            UserDomain user = new UserDomain();
+            user.setUserName("tester" + i);
+            user.setUserPassword("testPwd" + i);
+            user.setUserEmail("testEmail" + i);
+            list.add(user);
+        }
+        userService.putData(list);
+    }
+    @ResponseBody
+    @PostMapping("/signup")
+    public void signUp(@RequestBody Map<String, Object> map)
+    {
+        System.out.println("회원가입 시작");
+        Map<String, Object> result = map;
+        result.put("userId", "testid");
+        result.put("userPassword", "testPsw");
 
     }
+
+    @ResponseBody
+    @PostMapping("/signin")
+    public void signIn(@RequestBody Map<String, Object> map)
+    {
+        System.out.println("로그인");
+        Map<String, Object> result = map;
+        result.put("userId", "testid");
+        result.put("userPassword", "testPsw");
+
+        userService.signIn(result);
+
+
+    }
+
+
 }
