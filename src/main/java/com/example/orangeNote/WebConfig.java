@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
         // cors 오류 해결
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080")
-                .allowedMethods("GET", "POST")
+                .allowedMethods("*")
                 .allowCredentials(true); // 쿠키나 인증 헤더 정보를 받아올지 결정
     }
 }
