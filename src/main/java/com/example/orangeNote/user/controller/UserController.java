@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -48,8 +46,8 @@ public class UserController {
         userService.signUp(map);
     }
     @ResponseBody
-    @RequestMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void signIn(@RequestBody Map<String, Object> map)
+    @RequestMapping(value = "/signin")
+    public void signIn(@RequestParam Map<String, Object> map)
     {
         System.out.println("로그인");
         Map<String, Object> result = map;
@@ -58,5 +56,6 @@ public class UserController {
 
         userService.signIn(result);
     }
+
 
 }
