@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080")
                 .allowedMethods("*")
+                .allowedHeaders("*")
                 .allowCredentials(true); // 쿠키나 인증 헤더 정보를 받아올지 결정
     }
 }
