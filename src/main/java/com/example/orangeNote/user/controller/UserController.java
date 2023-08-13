@@ -1,17 +1,19 @@
 package com.example.orangeNote.user.controller;
 
 import com.example.orangeNote.user.domain.UserDomain;
-import com.example.orangeNote.user.dto.UserDto;
 import com.example.orangeNote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -35,29 +37,26 @@ public class UserController {
         userService.putData(list);
     }
     @ResponseBody
-    @PostMapping("/signup")
-    public void signUp(@RequestBody Map<String, Object> map)
-    {
+    @RequestMapping("/signup")
+    public void signUp(/*@RequestBody Map<String, Object> map*/) {
         System.out.println("회원가입 시작");
-        Map<String, Object> result = map;
-        result.put("userId", "testid");
-        result.put("userPassword", "testPsw");
-
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("user_Name", "signUpName");
+        map.put("user_Password", "signUpPassword");
+        map.put("user_Email", "signUpEmil");
+        map.put("passwordConfirm", true);
+        userService.signUp(map);
     }
-
     @ResponseBody
-    @PostMapping("/signin")
+    @RequestMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void signIn(@RequestBody Map<String, Object> map)
     {
         System.out.println("로그인");
         Map<String, Object> result = map;
-        result.put("userId", "testid");
-        result.put("userPassword", "testPsw");
+        result.put("userId", map.get("id"));
+        result.put("userPassword", map.get("password"));
 
         userService.signIn(result);
-
-
     }
-
 
 }
