@@ -4,14 +4,12 @@ import com.example.orangeNote.user.domain.UserDomain;
 import com.example.orangeNote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -36,25 +34,18 @@ public class UserController {
     }
     @ResponseBody
     @RequestMapping("/signup")
-    public void signUp(/*@RequestBody Map<String, Object> map*/) {
+    public void signUp(@RequestBody Map<String, Object> input) {
         System.out.println("회원가입 시작");
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("user_Name", "signUpName");
-        map.put("user_Password", "signUpPassword");
-        map.put("user_Email", "signUpEmil");
-        map.put("passwordConfirm", true);
-        userService.signUp(map);
+        Map<String, Object> temp = new HashMap<>(input);
     }
     @ResponseBody
-    @RequestMapping(value = "/signin")
-    public void signIn(@RequestParam Map<String, Object> map)
+    @RequestMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> signIn(@RequestBody Map<String, Object> map)
     {
-        System.out.println("로그인");
-        Map<String, Object> result = map;
-        result.put("userId", map.get("id"));
-        result.put("userPassword", map.get("password"));
-
-        userService.signIn(result);
+        System.out.println("로그인 시도");
+        Map<String, Object> input = new HashMap<>(map);
+        Map<String, Object> response = userService.signIn(input);
+        return ResponseEntity.ok(response);
     }
 
 
