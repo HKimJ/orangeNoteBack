@@ -1,9 +1,12 @@
 package com.example.orangeNote.user.domain;
 
+import com.example.orangeNote.project.domain.ProjectDomain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -25,8 +28,10 @@ public class UserDomain {
     private Date joinDate;
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'USER'", insertable = false) // 현재 권한 변경 가능한 상태
     private String userRole;
-    @Column(columnDefinition = "VARCHAR(255)") // 참여한 프로젝트
-    private String project;
+
+    @ManyToMany
+    @Column(columnDefinition = "VARCHAR(255)") // 참여한 프로젝트, 프로젝트 entity와 매핑 예정, 데이터 타입 추후 변경
+    private List<ProjectDomain> projects = new ArrayList<>();
 
 
 }
