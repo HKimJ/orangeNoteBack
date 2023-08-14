@@ -32,19 +32,29 @@ public class UserController {
         }
         userService.putData(list);
     }
+
     @ResponseBody
-    @RequestMapping("/signup")
-    public void signUp(@RequestBody Map<String, Object> input) {
-        System.out.println("회원가입 시작");
-        Map<String, Object> temp = new HashMap<>(input);
+    @RequestMapping("signupCheck")
+    public String signUpCheck(@RequestBody String input) {
+        String temp = input;
+        String response = userService.signUpCheck(input);
+        return response;
     }
     @ResponseBody
-    @RequestMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> signIn(@RequestBody Map<String, Object> map)
+    @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String signUp(@RequestBody Map<String, Object> input) {
+        System.out.println("회원가입 시작");
+        Map<String, Object> temp = new HashMap<>(input);
+        String signUpRes = userService.signUp(temp);
+        return signUpRes;
+    }
+    @ResponseBody
+    @PostMapping(value = "/signin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> signIn(@RequestBody Map<String, Object> input)
     {
         System.out.println("로그인 시도");
-        Map<String, Object> input = new HashMap<>(map);
-        Map<String, Object> response = userService.signIn(input);
+        Map<String, Object> temp = new HashMap<>(input);
+        Map<String, Object> response = userService.signIn(temp);
         return ResponseEntity.ok(response);
     }
 

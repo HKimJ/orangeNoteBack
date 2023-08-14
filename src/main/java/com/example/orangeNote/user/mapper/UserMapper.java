@@ -14,7 +14,7 @@ public interface UserMapper {
     UserDto domainToDto(UserDomain userDomain);
     @Mapping(target = "userPassword", ignore =true)
     @Mapping(target = "userRole", ignore = true)
-    UserDto domainToDtoSafe(UserDomain userDomain); // 현재 동작하지 않음, 추후에 수정해서 반영
+    UserDto domainToDtoSafe(UserDomain userDomain); // 현재 의도한 대로 동작하지 않고 바로 위 메서드와 차이가 없음, 추후에 수정해서 반영
 
     UserDomain dtoToDomain(UserDto userDto);
 
