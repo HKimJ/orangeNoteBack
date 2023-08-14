@@ -2,10 +2,13 @@ package com.example.orangeNote.user.service;
 
 import com.example.orangeNote.user.domain.UserDomain;
 import com.example.orangeNote.user.dto.UserDto;
+import com.example.orangeNote.user.mapper.UserMapper;
 import com.example.orangeNote.user.mapper.UserMapperImpl;
 import com.example.orangeNote.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +16,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepo;
-//    private UserDomain userDomain;
-
+    private final UserMapper userMapper = UserMapper.INSTANCE;
+    private UserDomain userDomain;
     public void putData(List<UserDomain> sample) {
         userRepo.saveAll(sample);
     }
@@ -42,29 +45,36 @@ public class UserService {
         }
     }
 
-    public void signIn(Map<String, Object> result) {
+    public Map<String, Object> signIn(Map<String, Object> input) {
         try {
             UserDto userDto = new UserDto();
-            userDto.setUserName(String.valueOf(result.get("userId")));
-            userDto.setUserPassword(String.valueOf(result.get("userPassword")));
+            userDto.setUserName(String.valueOf(input.get("id")));
+            userDto.setUserPassword(String.valueOf(input.get("password")));
 
-            if (userRepo.findUserByUserName(userDto.getUserName()) == null) {
-                System.out.println("해당하는 id가 없습니다");
-            } else if (userRepo.findUserByUserName(userDto.getUserName()) != userRepo.findUserByUserPassword(userDto.getUserPassword()) ) {
-                System.out.println("비밀번호가 틀립니다");
+//            UserDto simpleDto = userMapper.createUserDtoFromUserDomain(userRepo.findUserByUserName(userDto.getUserName()));
+//            현재 의도한대로 작동하지 않음, 추후 수정해 반영 예정
+            UserDomain temp = userRepo.findUserByUserName(userDto.getUserName());
+            Map<String, Object> result = new HashMap<>();
+            if (temp.getUserName().equals(input.get("id")) && temp.getUserPassword().equals(input.get("password"))) {
+                System.out.println("입력 정보와 일치하는 아이디 존재");
+                result.put("status", 200);
+                result.put("data", userMapper.domainToDtoSafe(temp)); // 기능상 에러는 없지만 불필요한 필드값을 포함해 생성됨
             } else {
-                System.out.println("로그인 성공");
+                System.out.println("입력한 계정 정보가 없거나 잘못됨");
+                result.put("status", 404);
+                result.put("data", "입력한 계정 정보가 없거나 잘못됨");
             }
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
     }
 
     public void findOneUser(Map<String, Object> map) {
-        String name = String.valueOf(map.get("userName"));
-        UserDomain usd = userRepo.findUserByUserName("name");
-        UserDto userdto = UserMapperImpl.INSTANCE.domainToDtoSafe(usd);
+//        String name = String.valueOf(map.get("userName"));
+//        UserDomain usd = userRepo.findUserByUserName("name");
+//        UserDto userDto = UserMapperImpl.INSTANCE.domainToDtoSafe(usd);
 
     }
 
