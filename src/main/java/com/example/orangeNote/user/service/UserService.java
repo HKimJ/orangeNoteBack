@@ -5,7 +5,6 @@ import com.example.orangeNote.user.dto.UserDto;
 import com.example.orangeNote.user.mapper.UserMapper;
 import com.example.orangeNote.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.bridge.IMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,7 +16,10 @@ import java.util.Map;
 public class UserService {
     private final UserRepository userRepo;
     private final UserMapper userMapper = UserMapper.INSTANCE;
+
+    private final EmailService emailService;
     private UserDomain userDomain;
+
     public void putData(List<UserDomain> sample) {
         userRepo.saveAll(sample);
     }
@@ -41,8 +43,8 @@ public class UserService {
         }
     }
 
-    public Map<String, Object> idCheck(String id) {
-        Map<String, Object> result = new HashMap<>();
+    public Map<String, String> idCheck(String id) {
+        Map<String, String> result = new HashMap<>();
         try {
             userDomain = userRepo.findUserByUserId(id);
 
@@ -61,19 +63,19 @@ public class UserService {
             result.put("status", "500");
             result.put("data", "알 수 없는 오류가 발생했습니다.");
             return result;
-
-
         }
     }
 
-    public Map<String, Object> emailCheck(String email) {
-        Map<String, Object> result = new HashMap<>();
+    public Map<String, String> emailCheck(String email) {
+        Map<String, String> result = new HashMap<>();
         try {
             userDomain = userRepo.findUserByUserEmail(email);
 
             if (userDomain == null) { // 중복 없는 것을 확인
                 result.put("status", "200");
-                result.put("data", "이메일을 발송했습니다.");
+                result.put("data", "인증 코드를 발송했습니다.");
+                emailService.sendVerificationMail(email);
+
             } else {
                 result.put("status", "403");
                 result.put("data", "이미 가입된 이메일 입니다.");
@@ -86,8 +88,16 @@ public class UserService {
             result.put("status", "500");
             result.put("data", "알 수 없는 오류가 발생했습니다.");
             return result;
+        }
+    }
 
+    public Map<String, String> emailConfirm(String verifyCode) {
+        Map<String, String> result = new HashMap<>();
+        try {
 
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 
