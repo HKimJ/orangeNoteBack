@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UserDto {
 
-    private String userName;
+    private String userId;
     private String userPassword;
     private String userEmail;
     private String userRole; // 추후 security 적용시 다시 보기

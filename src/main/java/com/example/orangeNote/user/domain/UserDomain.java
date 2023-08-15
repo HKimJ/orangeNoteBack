@@ -19,7 +19,7 @@ public class UserDomain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userSeq; // 회원가입 번호, pk
     @Column(columnDefinition = "VARCHAR(20)",unique = true, updatable = false)
-    private String userName; // 로그인 시 아이디 겸 닉네임
+    private String userId; // 로그인 시 아이디 겸 닉네임
     @Column(columnDefinition = "VARCHAR(30)",unique = true, updatable = false)
     private String userEmail;
     @Column(columnDefinition = "VARCHAR(20)")
