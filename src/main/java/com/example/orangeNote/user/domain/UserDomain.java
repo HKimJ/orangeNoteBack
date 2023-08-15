@@ -29,8 +29,7 @@ public class UserDomain {
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'USER'", insertable = false) // 현재 권한 변경 가능한 상태
     private String userRole;
 
-    @ManyToMany
-    @Column(columnDefinition = "VARCHAR(255)") // 참여한 프로젝트, 프로젝트 entity와 매핑 예정, 데이터 타입 추후 변경
+    @ManyToMany// 참여한 프로젝트, 프로젝트 entity와 매핑 예정, 데이터 타입 추후 변경
     private List<ProjectDomain> projects = new ArrayList<>();
 
 

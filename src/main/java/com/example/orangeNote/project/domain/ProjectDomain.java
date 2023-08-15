@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Entity
 @Data
-@Table(name = "orange_Projects")
+@Table(name = "orange_Project")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDomain {
@@ -27,7 +27,6 @@ public class ProjectDomain {
 
     @ManyToMany(mappedBy = "projects")
     @Convert(converter = JsonAttributeConverter.class)
-    @Column(columnDefinition = "JSON")
     private List<UserDomain> projectMember = new ArrayList<>();
 
     @Convert(converter = JsonAttributeConverter.class)
