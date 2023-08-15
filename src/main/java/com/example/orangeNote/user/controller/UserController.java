@@ -15,7 +15,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @RequestMapping
+    @RequestMapping("/")
     public void home() {
         System.out.println("시작화면");
     }
@@ -25,8 +25,8 @@ public class UserController {
         List<UserDomain> list = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
             UserDomain user = new UserDomain();
-            user.setUserName("tester" + i);
-            user.setUserPassword("testPwd" + i);
+            user.setUserId("tester" + i);
+            user.setUserPassword("pwd" + i);
             user.setUserEmail("testEmail" + i);
             list.add(user);
         }
@@ -34,11 +34,19 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping("signupCheck")
-    public String signUpCheck(@RequestBody String input) {
-        String temp = input;
-        String response = userService.signUpCheck(input);
-        return response;
+    @RequestMapping("/idCheck")
+    public ResponseEntity<?> idCheck(@RequestBody Map<String, Object> input) {
+        Map<String, Object> response = new HashMap<>(input);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @ResponseBody
+    @RequestMapping("/emailCheck")
+    public ResponseEntity<?> emailCheck(@RequestBody Map<String, Object> input) {
+        Map<String, Object> response = new HashMap<>(input);
+
+        return ResponseEntity.ok(response);
     }
     @ResponseBody
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
