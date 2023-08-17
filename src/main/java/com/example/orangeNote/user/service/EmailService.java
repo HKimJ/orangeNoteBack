@@ -15,17 +15,17 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final RedisService redisService;
-
+    private final int EXPIRE_MIN = 3;
     public Map<String, Object> sendVerificationMail(String email) {
         String verifyCode = generateCode();
         Map<String, Object> result = new HashMap<>();
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         String title = "Orange Note 인증 코드";
         StringBuilder content = new StringBuilder();
-        int expireTime = 3;
-        content.append("<h3> 요청하신 인증 코드는 다음과 같습니다</h3>")
+
+        content.append("<h3> 요청하신 인증 코드는 다음과 같습니다.</h3>")
                 .append("<h1> [ ").append(verifyCode).append(" ]</h1>")
-                .append("<h3> 인증 코드는").append(expireTime).append("분 후에 만료됩니다</h3>");
+                .append("<h3> 인증 코드는 ").append(EXPIRE_MIN).append("분 후에 만료됩니다.</h3>");
 
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -33,7 +33,7 @@ public class EmailService {
             mimeMessageHelper.setSubject(title); // 메일 제목
             mimeMessageHelper.setText(content.toString(), true); // 메일 본문 내용, HTML 여부
             mailSender.send(mimeMessage);
-            redisService.storeDataInRedis(email, verifyCode, expireTime);
+            redisService.storeDataInRedis(email, verifyCode, EXPIRE_MIN);
             result.put("success", "200");
             result.put("data", true);
             return result;
