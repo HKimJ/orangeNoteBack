@@ -1,8 +1,7 @@
 package com.example.orangeNote.user.controller;
 
 import com.example.orangeNote.user.domain.UserDomain;
-import com.example.orangeNote.user.dto.MailDto;
-import com.example.orangeNote.user.service.EmailService;
+import com.example.orangeNote.user.dto.UserDto;
 import com.example.orangeNote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,7 +15,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-    private final EmailService emailService;
+    private static UserDto userDto = new UserDto();
 
     @RequestMapping("/")
     public void home() {
@@ -30,58 +29,71 @@ public class UserController {
             UserDomain user = new UserDomain();
             user.setUserId("tester" + i);
             user.setUserPassword("pwd" + i);
-            user.setUserEmail("testEmail" + i);
+            user.setUserEmail("email" + i);
             list.add(user);
         }
         userService.putData(list);
     }
+    @RequestMapping("/sample2")
+    public void sample2() {
+        List<UserDomain> list2 = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            UserDomain user = new UserDomain();
+
+            user.setUserPassword("pwd" + i);
+            user.setUserEmail("email" + i);
+
+            list2.add(user);
+        }
+        userService.putData(list2);
+    }
+
+
     @ResponseBody
     @PostMapping(value = "/signUp", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String signUp(@RequestBody Map<String, Object> input) {
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody Map<String, Object> input) {
         System.out.println("회원가입 시작");
         Map<String, Object> temp = new HashMap<>(input);
-        String signUpRes = userService.signUp(temp);
-        return signUpRes;
+        Map<String, Object> response;
+        response = userService.signUp(temp);
+        return ResponseEntity.ok(response);
     }
 
     @ResponseBody
-    @RequestMapping("/idCheck")
-    public ResponseEntity<?> idCheck(@RequestBody Map<String, String> inputId) {
+    @RequestMapping(value= "/idCheck", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> idCheck(@RequestBody Map<String, String> inputId) {
         String id = inputId.get("id");
-        Map<String, String> response = userService.idCheck(id);
+        Map<String, Object> response = userService.idCheck(id);
         return ResponseEntity.ok(response);
     }
 
     @ResponseBody
-    @RequestMapping("/emailCheck")
-    public ResponseEntity<Map<String, String>> emailCheck(@RequestBody Map<String, String> inputEmail) {
+    @RequestMapping(value ="/emailCheck", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> emailCheck(@RequestBody Map<String, String> inputEmail) {
         String email = inputEmail.get("email");
-        Map<String, String> response = userService.emailCheck(email); // 여기서 메일 유효하면 발송까지 함
+        userDto.setUserEmail(email);
+        Map<String, Object> response = userService.emailCheck(email); // 여기서 메일 유효하면 발송까지 함
 
         return ResponseEntity.ok(response);
     }
 
     @ResponseBody
-    @RequestMapping("/emailConfirm")
-    public ResponseEntity<Map<String, String>> emailConfirm(@RequestBody Map<String, String> inputCode) {
-        String verifyCode = inputCode.get("emailConfirm");
-        Map<String, String> response = userService.emailConfirm(verifyCode);
-
-        emailService.sendVerificationMail(verifyCode);
-
+    @RequestMapping(value ="/emailConfirm", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> emailConfirm(@RequestBody Map<String, String> inputCode) {
+        String email = userDto.getUserEmail();
+        String verifyCode = inputCode.get("emailCheckCode");
+        Map<String, Object> response = userService.emailConfirm(email, verifyCode);
         return ResponseEntity.ok(response);
     }
 
 
     @ResponseBody
     @PostMapping(value = "/signIn", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> signIn(@RequestBody Map<String, Object> input)
+    public ResponseEntity<Map<String, Object>> signIn(@RequestBody Map<String, Object> input)
     {
         System.out.println("로그인 시도");
         Map<String, Object> temp = new HashMap<>(input);
         Map<String, Object> response = userService.signIn(temp);
         return ResponseEntity.ok(response);
     }
-
-
 }

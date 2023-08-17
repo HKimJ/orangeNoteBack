@@ -26,8 +26,7 @@ public class ProjectDomain {
     private String projectName;
 
     @ManyToMany(mappedBy = "projects")
-    @Convert(converter = JsonAttributeConverter.class)
-    private List<UserDomain> projectMember = new ArrayList<>();
+    private List<UserDomain> projectMembers = new ArrayList<>();
 
     @Convert(converter = JsonAttributeConverter.class)
     @Column(columnDefinition = "JSON")
@@ -38,7 +37,5 @@ public class ProjectDomain {
 
     @Temporal(value = TemporalType.DATE) @Column(columnDefinition = "DATE DEFAULT (CURRENT_DATE)", insertable = false, updatable = false)
     private Date createdDate;
-
-
 
 }
