@@ -15,7 +15,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-    private static UserDto userDto = new UserDto();
+    private UserDto userDto;
 
     @RequestMapping("/")
     public void home() {
@@ -71,6 +71,7 @@ public class UserController {
     @RequestMapping(value ="/emailCheck", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> emailCheck(@RequestBody Map<String, String> inputEmail) {
         String email = inputEmail.get("email");
+        userDto = new UserDto();
         userDto.setUserEmail(email);
         Map<String, Object> response = userService.emailCheck(email); // 여기서 메일 유효하면 발송까지 함
 

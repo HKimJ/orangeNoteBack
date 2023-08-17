@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectDomain, Long> {
 
+    ProjectDomain save(ProjectDomain projectDomain);
     ProjectDomain findProjectByProjectId(Long id);
     ProjectDomain findProjectByProjectName(String name);
 

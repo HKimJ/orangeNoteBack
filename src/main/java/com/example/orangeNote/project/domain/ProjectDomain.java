@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Data
@@ -25,17 +22,25 @@ public class ProjectDomain {
     @Column(columnDefinition = "VARCHAR(20)", unique = true)
     private String projectName;
 
-    @ManyToMany(mappedBy = "projects")
-    private List<UserDomain> projectMembers = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private UserDomain creator; // 프로젝트 생성자 >> 권한 등과 연계
 
-    @Convert(converter = JsonAttributeConverter.class)
-    @Column(columnDefinition = "JSON")
-    private Map<String, Object> projectIssue;
+    @ManyToMany
+    @JoinTable(
+            name = "project_member",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserDomain> members = new HashSet<>(); // 프로젝트 참여자 목록
 
-    @Column(columnDefinition = "VARCHAR(50)")
-    private String projectDescription;
+    @OneToMany(mappedBy = "parentProject")
+    private Set<IssueDomain> projectIssues = new HashSet<>(); // 프로젝트 이슈 목록
+
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String projectDescription; // 프로젝트 설명
 
     @Temporal(value = TemporalType.DATE) @Column(columnDefinition = "DATE DEFAULT (CURRENT_DATE)", insertable = false, updatable = false)
-    private Date createdDate;
+    private Date createdDate; // 프로젝트 생성일
 
 }
