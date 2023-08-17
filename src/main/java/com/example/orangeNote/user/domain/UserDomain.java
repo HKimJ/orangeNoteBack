@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Data
@@ -29,8 +28,12 @@ public class UserDomain {
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'USER'", insertable = false) // 현재 권한 변경 가능한 상태
     private String userRole;
 
-    @ManyToMany// 참여한 프로젝트, 프로젝트 entity와 매핑 예정, 데이터 타입 추후 변경
+    @ManyToMany
+    @JoinTable(
+            name = "user_project", // The name of the join table
+            joinColumns = @JoinColumn(name = "user_id"), // Column in this entity
+            inverseJoinColumns = @JoinColumn(name = "project_id") // Column in the related entity
+    )
     private List<ProjectDomain> projects = new ArrayList<>();
-
 
 }
