@@ -4,7 +4,6 @@ import com.example.orangeNote.user.domain.UserDomain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDto {
-
-    private String projectId;
+    private Long projectId;
     private String projectName;
     private UserDomain creator;
     private Set<UserDomain> projectMembers = new HashSet<>();

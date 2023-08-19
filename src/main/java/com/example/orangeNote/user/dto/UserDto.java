@@ -1,6 +1,5 @@
 package com.example.orangeNote.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Data
