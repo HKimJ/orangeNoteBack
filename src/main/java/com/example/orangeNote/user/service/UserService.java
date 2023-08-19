@@ -9,10 +9,7 @@ import com.example.orangeNote.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +62,7 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
-            response.put("errorMessage", "회원가입 과정에서 문제가 발생하였습니다. 관리자에게 문의해주세요");
+            response.put("data", "회원가입 과정에서 문제가 발생하였습니다. 관리자에게 문의해주세요");
             return response;
         }
     }
@@ -88,7 +85,7 @@ public class UserService {
         } catch(Exception e) {
             e.printStackTrace();
             result.put("success", false);
-            result.put("errorMessage", "알 수 없는 오류가 발생했습니다.");
+            result.put("data", "중복확인 과정에서 문제가 발생했습니다. 관리자에게 문의해주세요");
             return result;
         }
     }
@@ -113,7 +110,7 @@ public class UserService {
         } catch(Exception e) {
             e.printStackTrace();
             result.put("success", false);
-            result.put("errorMessage", "알 수 없는 오류가 발생했습니다.");
+            result.put("data", "메일 주소 확인 과정에서 문제가 발생했습니다. 관리자에게 문의해주세요");
             return result;
         }
     }
@@ -127,7 +124,7 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
-            response.put("errorMessage", "인증코드를 검증하는 동안 문제가 발생했습니다. 관리자에게 문의해주세요");
+            response.put("data", "인증코드를 검증하는 동안 문제가 발생했습니다. 관리자에게 문의해주세요");
             return response;
         }
     }
@@ -161,11 +158,6 @@ public class UserService {
         }
     }
 
-//    public void findOneUser(Map<String, Object> map) {
-//        String name = String.valueOf(map.get("userName"));
-//        UserDomain usd = userRepo.findUserByUserName("name");
-//        UserDto userDto = UserMapperImpl.INSTANCE.domainToDtoSafe(usd);
-//
-//    }
+
 
 }

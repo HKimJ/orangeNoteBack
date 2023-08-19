@@ -15,7 +15,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-    private UserDto userDto;
+    private UserDto userDto = new UserDto();
 
     @RequestMapping("/")
     public void home() {

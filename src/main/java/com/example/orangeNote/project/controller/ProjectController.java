@@ -19,14 +19,19 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @ResponseBody
     @RequestMapping(value="/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> createProject(@RequestBody Map<String, Object> input) {
         Map<String, Object> temp = new HashMap<>(input);
-        Map<String, Object> response = new HashMap<>();
-
-//        response = projectService.
-
-        return ResponseEntity.ok(null);
+        Map<String, Object> response = projectService.createProject(temp);
+        return ResponseEntity.ok(response);
     }
+
+    @RequestMapping(value = "/findCreatedProjects", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> findCreatedProjects(@RequestBody Map<String, Object> input) {
+        Map<String, Object> temp = new HashMap<>(input);
+        Map<String, Object> response = projectService.findProjectListByCreator(temp);
+        return ResponseEntity.ok(response);
+    }
+
+
 }
