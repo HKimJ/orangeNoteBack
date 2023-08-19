@@ -18,7 +18,7 @@ public class EmailService {
     private final int EXPIRE_MIN = 3;
     public Map<String, Object> sendVerificationMail(String email) {
         String verifyCode = generateCode();
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         String title = "Orange Note 인증 코드";
         StringBuilder content = new StringBuilder();
@@ -34,15 +34,15 @@ public class EmailService {
             mimeMessageHelper.setText(content.toString(), true); // 메일 본문 내용, HTML 여부
             mailSender.send(mimeMessage);
             redisService.storeDataInRedis(email, verifyCode, EXPIRE_MIN);
-            result.put("success", "200");
-            result.put("data", true);
-            return result;
+            response.put("success", "200");
+            response.put("data", true);
+            return response;
 
         } catch (Exception e) {
             e.printStackTrace();
-            result.put("success", false);
-            result.put("errorMessage","알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요");
-            return result;
+            response.put("success", false);
+            response.put("data","알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요");
+            return response;
         }
     }
 
@@ -57,11 +57,11 @@ public class EmailService {
                 response.put("success", false);
                 response.put("data", "코드가 일치하지 않습니다.");
             }
+            return response;
        } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
-            response.put("errorMessage", "인증 코드가 만료되었거나 인증 과정에서 문제가 발생했습니다.");
-        } finally {
+            response.put("data", "인증 코드가 만료되었거나 인증 과정에서 문제가 발생했습니다.");
             return response;
         }
     }
